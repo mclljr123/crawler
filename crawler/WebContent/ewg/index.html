@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<title>EWG.ORG</title>
+		
+		<script type="text/javascript"	src="/crawler/jquery/jquery-2.2.0.js"></script>
+		<script type="text/ecmascript"	src="/crawler/libs/Guriddo_jqGrid_JS_5.0.2/js/jquery.jqGrid.min.js"></script>
+		<script type="text/ecmascript"	src="/crawler/libs/Guriddo_jqGrid_JS_5.0.2/js/i18n/grid.locale-kr.js"></script>
+		<script type="text/ecmascript"	src="/crawler/libs/Guriddo_jqGrid_JS_5.0.2/plugins/jquery.contextmenu.js"></script>
+		
+		<link rel="stylesheet" type="text/css" media="screen" href="/crawler/libs/Guriddo_jqGrid_JS_5.0.2/css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" media="screen" href="/crawler/libs/Guriddo_jqGrid_JS_5.0.2/css/ui.jqgrid.css" />
+		
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#jqGrid").jqGrid({
+					colModel: [
+						{
+							label:'Symbol',
+							name: 'image',
+							width: 26,
+							align:'center',
+							formatter:formatImage
+						},
+						{
+							label:'Ingredient Name',
+							name: 'name',
+							width: 200,
+							formatter:formatLink
+						},
+						{
+							label:'Score',
+							name: 'score',
+							width: 36,
+							align:'center',
+							formatter:formatImage
+						},
+					],
+					viewrecords: true, // show the current page, data rang and total records on the toolbar
+					width: 780,
+					height: 520,
+					rowNum: 20,
+					datatype:'local',
+					rownumbers:true,
+					pager: "#jqGridPager",
+					caption:"http://www.ewg.org/skindeep/",
+					gridComplete: initGrid
+				});
+				
+				$("#submit").click(function(){
+					var gridArrayData = [];
+					var	q			= document.getElementById("query").value;
+					// show loading message
+					$("#jqGrid")[0].grid.beginReq();
+					$.ajax({
+						url: "/crawler/ewg/web/search?query=" + q,
+						success: function (result) {
+							console.log(result);
+							for (var i = 0; i < result.rows.length; i++) {
+								var rows = result.rows[i];
+								gridArrayData.push({
+									image: rows.image,
+									name: rows.name,
+									url: rows.url,
+									score: rows.score
+								});
+							}
+							// set the new data
+							$("#jqGrid").jqGrid('setGridParam', { data: gridArrayData});
+							// hide the show message
+							$("#jqGrid")[0].grid.endReq();
+							// refresh the grid
+							$("#jqGrid").trigger('reloadGrid');
+						},
+						error:function(m){
+							alert('Query has been error! check server error logs!');
+						}
+					});
+				});
+				function formatLink(cellValue, options, rowObject) {
+					return "<a href='" + rowObject.url + "'>" + cellValue + "</a>";
+				};
+				function formatImage(cellValue, options, rowObject) {
+					var imageHtml = "<img src='" + cellValue + "' originalValue='" + cellValue + "' />";
+					return imageHtml;
+				}
+			});
+			function initGrid() {
+				$(".jqgrow", "#jqGrid").contextMenu('contextMenu', {
+					bindings: {
+						'add': function (t) {
+							addRow(t);
+						}
+					},
+					onContextMenu: function (event, menu) {
+						var	rowId	= $(event.target).parent("tr").attr("id")
+						var	grid	= $("#jqGrid");
+						grid.setSelection(rowId);
+						return true;
+					}
+				});
+			}
+			function addRow(t) {
+				//var grid = $("#jqGrid");
+				//grid.editGridRow("new", { closeAfterAdd: true});
+				console.log(t);
+			}
+		</script>
+	</head>
+	<body>
+		<h1>EWG.ORG</h1>
+		<form id="ewgform">
+			<input type="text"		id="query">
+			<input type="button"	id="submit"		value="search">
+		</form>
+		
+		<div id="list">
+			<table id="jqGrid"></table>
+			<div id="jqGridPager"></div>
+			
+			<div class="contextMenu" id="contextMenu" style="display:none">
+				<ul style="width: 300px; font-size: 65%;">
+					<li id="add">
+						<span class="ui-icon ui-icon-plus" style="float:left"></span>
+						<span style="font-size:100%; font-family:Verdana">Add This</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
