@@ -12,11 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebServlet(name = "search",	urlPatterns = "/ewg/web/search")

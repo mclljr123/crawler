@@ -8,12 +8,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptahs.crawler.CrawlerExecutor;
 
 public class Ewg extends CrawlerExecutor{
 	private	String	query;
-	private	List<EwgListDataSource> data;
 	
 	@Override
 	public String getUrl() {
