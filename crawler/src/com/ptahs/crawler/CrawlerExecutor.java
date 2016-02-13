@@ -18,7 +18,7 @@ public abstract class CrawlerExecutor implements CrawlerInterface{
 	public CrawlerExecutor(){
 		System.out.println("Crawler Executed!");
 	}
-	protected void execte(){
+	protected void exec(){
 		URL					url;
 		HttpURLConnection	con;
 		BufferedReader		br;

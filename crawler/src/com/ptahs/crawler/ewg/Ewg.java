@@ -77,7 +77,7 @@ public class Ewg extends CrawlerExecutor{
 	}
 	@Override
 	public void execute() {
-		super.execte();
+		super.exec();
 	}
 	@Override
 	public void setQuery(String query) {

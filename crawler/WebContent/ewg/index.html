@@ -102,9 +102,31 @@
 				});
 			}
 			function addRow(t) {
-				//var grid = $("#jqGrid");
-				//grid.editGridRow("new", { closeAfterAdd: true});
-				console.log(t);
+				
+				var	action		= "/crawler/ewg/web/add";
+				
+				var	objName		= $(t).find("td").get(2);
+				var	objScore	= $(t).find("td").get(3);
+				var	name		= $(objName).attr("title");
+				var	score		= $(objScore).find("img").attr("src");
+				var	query		= {
+					name:name,
+					score:score
+				};
+				
+				$.ajax({
+					type:"post",
+					data:query,
+					url:action,
+					success:function(response){
+						console.log("ok");
+						console.log(response);
+					},
+					error:function(response){
+						console.log("error");
+						console.log(response);
+					}
+				});
 			}
 		</script>
 	</head>

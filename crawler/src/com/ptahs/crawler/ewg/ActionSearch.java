@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebServlet(name = "search",	urlPatterns = "/ewg/web/search")
-public class Search extends HttpServlet {
+public class ActionSearch extends HttpServlet {
 	private static final	long serialVersionUID = 2270282707172794497L;
 	final					ObjectMapper	mapper	= new ObjectMapper();
 	final					Ewg				ewg		= new Ewg();
